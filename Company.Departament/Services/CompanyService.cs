@@ -1,62 +1,46 @@
-﻿using System;
+﻿using FFBusiness.Interface1;
+using FFBusiness.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Company.Departament.Services
+public class CompanyService
 {
-    public class CompanyService
+    private readonly ICompanyRepository _companyRepository;
+
+    public CompanyService(ICompanyRepository companyRepository)
     {
-        private readonly Dictionary<int, CompanyService> companies;
+        _companyRepository = companyRepository;
+    }
 
-        public string Name { get; private set; }
-
-        public CompanyService(int companyId, string name)
+    public Company CreateCompany(string name)
+    {
+        if (string.IsNullOrEmpty(name))
         {
-            companies = new Dictionary<int, CompanyService>();
+            throw new ArgumentException("Company name cannot be empty.");
         }
 
-        public CompanyService AddCompany(string name)
-        {
-            int companyId = GenerateCompanyId();
+        return _companyRepository.Create(name);
+    }
 
-            CompanyService company = new CompanyService(companyId, name);
-            companies.Add(companyId, company);
-            return company;
+    public Company GetCompanyById(int id)
+    {
+        return _companyRepository.GetById(id);
+    }
+
+    public List<Company> GetAllCompanies()
+    {
+        return _companyRepository.GetAll();
+    }
+
+    public List<Department> GetAllDepartments(string companyName)
+    {
+        var company = _companyRepository.GetAll().FirstOrDefault(c => c.Name.ToLower() == companyName.ToLower());
+        if (company == null)
+        {
+            throw new ArgumentException("Company not found.");
         }
 
-        public List<CompanyService> GetAllCompanies()
-        {
-            return companies.Values.ToList();
-        }
-
-        public CompanyService GetCompanyById(int companyId)
-        {
-            if (companies.TryGetValue(companyId, out CompanyService company))
-            {
-                return company;
-            }
-            return null;
-        }
-
-        public void UpdateCompanyName(int companyId, string newName)
-        {
-            if (companies.TryGetValue(companyId, out CompanyService company))
-            {
-                company.Name = newName;
-            }
-        }
-
-        public void RemoveCompany(int companyId)
-        {
-            companies.Remove(companyId);
-        }
-
-        private int GenerateCompanyId()
-        {
-           
-            return companies.Count + 1;
-        }
-
-      
+        return company.Departments;
     }
 }

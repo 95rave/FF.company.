@@ -1,48 +1,67 @@
-﻿using Company.Departament.Models;
-using System;
+﻿using FFBusiness.Interface1;
+using FFBusiness.Models;
 using System.Collections.Generic;
+using System;
+using System.Linq;
 
-namespace Company.Departament.Services
+public class DepartmentService
 {
-    public class DepartmentService
+    private readonly IDepartmentRepository _departmentRepository;
+    public DepartmentService(IDepartmentRepository departmentRepository)
     {
-        private readonly List<Department> departments;
-
-        public DepartmentService()
-        {
-            departments = new List<Department>();
-        }
-
-        public Department CreateDepartment(string name, int employeeLimit, int companyId)
-        {
-            Department department = new Department(name, employeeLimit, companyId);
-            departments.Add(department);
-            return department;
-        }
-
-        public void AddEmployeeToDepartment(Employee employee, Department department)
-        {
-            department.AddEmployee(employee);
-        }
-
-        public List<Employee> GetDepartmentEmployees(Department department)
-        {
-            return department.GetEmployees();
-        }
-
-        public void UpdateDepartment(Department department, string newName, int newEmployeeLimit)
-        {
-            department.UpdateDepartment(newName, newEmployeeLimit);
-        }
-
-        public void RemoveDepartment(Department department)
-        {
-            departments.Remove(department);
-        }
-
-        public List<Department> GetAllDepartments()
-        {
-            return departments;
-        }
+        _departmentRepository = departmentRepository;
     }
+
+    public Department CreateDepartment(string name, int employeeLimit, int companyId)
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            throw new ArgumentException("Department name cannot be empty.");
+        }
+
+        return _departmentRepository.Create(name, employeeLimit, companyId);
+    }
+
+    public Department GetDepartmentById(int id)
+    {
+        return _departmentRepository.GetById(id);
+    }
+
+    public List<Department> GetAllDepartments()
+    {
+        return _departmentRepository.GetAll();
+    }
+
+    public void AddEmployeeToDepartment(Department department, Employee employee)
+    {
+        _departmentRepository.AddEmployeeToDepartment(department, employee);
+    }
+
+    public void UpdateDepartment(Department department, string newName, int newEmployeeLimit)
+    {
+        if (department == null)
+        {
+            throw new ArgumentNullException(nameof(department), "Department cannot be null.");
+        }
+        if (string.IsNullOrEmpty(newName))
+        {
+            throw new ArgumentException("New department name cannot be empty.");
+        }
+
+        _departmentRepository.UpdateDepartment(department, newName, newEmployeeLimit);
+    }
+
+    public void GetDepartmentEmployees(string departmentName)
+    {
+        var department = _departmentRepository.GetAll().FirstOrDefault(d => d.Name.ToLower() == departmentName.ToLower());
+        if (department == null)
+        {
+            throw new ArgumentException("Department not found.");
+        }
+
+        department.GetDepartmentEmployees();
+    }
+
+
+
 }

@@ -1,47 +1,34 @@
-﻿using Company.Departament.Models;
-using System;
+﻿using FFBusiness.Interface1;
+using FFBusiness.Models;
 using System.Collections.Generic;
-using System.Linq;
+using System;
 
-namespace Company.Departament.Services
-{
     public class EmployeeService
     {
-        private readonly List<Employee> employees;
-
-        public EmployeeService()
+        private readonly IEmployeeRepository _employeeRepository;
+        public EmployeeService(IEmployeeRepository employeeRepository)
         {
-            employees = new List<Employee>();
+            _employeeRepository = employeeRepository;
         }
 
-        public Employee AddEmployee(decimal salary, string name, string surname, int departmentId)
+        public Employee CreateEmployee(decimal salary, string name, string surname)
         {
-            Employee employee = Employee.Create(salary, name, surname, departmentId);
-            employees.Add(employee);
-            return employee;
-        }
-
-        public List<Employee> GetEmployeesByDepartmentId(int departmentId)
-        {
-            return employees.Where(e => e.DepartmentId == departmentId).ToList();
-        }
-
-        public void UpdateEmployeeSalary(int employeeId, decimal newSalary)
-        {
-            Employee employee = employees.FirstOrDefault(e => e.Id == employeeId);
-            if (employee != null)
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname))
             {
-                employee.Salary = newSalary;
+                throw new ArgumentException("Name and surname cannot be empty.");
             }
+
+            return _employeeRepository.Create(salary, name, surname);
         }
 
-        public void RemoveEmployee(int employeeId)
+        public Employee GetEmployeeById(int id)
         {
-            Employee employee = employees.FirstOrDefault(e => e.Id == employeeId);
-            if (employee != null)
-            {
-                employees.Remove(employee);
-            }
+            return _employeeRepository.GetById(id);
+        }
+
+        public List<Employee> GetAllEmployees()
+        {
+            return _employeeRepository.GetAll();
         }
     }
-}
+

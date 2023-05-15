@@ -1,0 +1,6 @@
+C:\Users\DELL\source\repos\FF.Company\Company.Departament\bin\Debug\Company.Departament.dll
+C:\Users\DELL\source\repos\FF.Company\Company.Departament\bin\Debug\Company.Departament.pdb
+C:\Users\DELL\source\repos\FF.Company\Company.Departament\obj\Debug\FFBusiness.csproj.AssemblyReference.cache
+C:\Users\DELL\source\repos\FF.Company\Company.Departament\obj\Debug\FFBusiness.csproj.CoreCompileInputs.cache
+C:\Users\DELL\source\repos\FF.Company\Company.Departament\obj\Debug\Company.Departament.dll
+C:\Users\DELL\source\repos\FF.Company\Company.Departament\obj\Debug\Company.Departament.pdb

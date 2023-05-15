@@ -1,36 +1,22 @@
-﻿using Company.Departament.Interface1;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Company.Departament.Models
+namespace FFBusiness.Models
 {
-    public class Company: IEntity
+    public class Company
     {
-        private static int count = 0;
-        private List<Department> departments;
+        private static int _count = 0;
+        private readonly List<Department> _departments;
 
         public int Id { get; }
-        public string Name { get; set; }
+        public string Name { get; }
 
         public Company(string name)
         {
-            Id = ++count;
+            Id = ++_count;
             Name = name;
-            departments = new List<Department>();
+            _departments = new List<Department>();
         }
 
-        public List<Department> GetAllDepartments()
-        {
-            return departments;
-        }
-
-        public static Company Create(string name)
-        {
-            return new Company(name);
-        }
+        public List<Department> Departments => _departments;
     }
-
 }

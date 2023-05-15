@@ -1,0 +1,2 @@
+C:\Users\DELL\source\repos\FF.Company\Company.Departament\obj\Debug\Company.Departament.csproj.AssemblyReference.cache
+C:\Users\DELL\source\repos\FF.Company\Company.Departament\obj\Debug\Company.Departament.csproj.CoreCompileInputs.cache

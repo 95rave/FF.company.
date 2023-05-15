@@ -1,29 +1,26 @@
-﻿using Company.Departament.Interface1;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Company.Departament.Models
+
+namespace FFBusiness.Models
 {
-    public class Department: IEntity
+    public class Department
     {
-        private static int count = 0;
-        private List<Employee> employees;
+        private static int _count = 0;
+        private readonly List<Employee> _employees;
 
         public int Id { get; }
         public string Name { get; set; }
         public int EmployeeLimit { get; set; }
-        public int CompanyId { get; set; }
+        public int CompanyId { get; }
 
         public Department(string name, int employeeLimit, int companyId)
         {
-            Id = ++count;
+            Id = ++_count;
             Name = name;
             EmployeeLimit = employeeLimit;
             CompanyId = companyId;
-            employees = new List<Employee>();
+            _employees = new List<Employee>();
         }
 
         public override string ToString()
@@ -33,13 +30,13 @@ namespace Company.Departament.Models
 
         public void AddEmployee(Employee employee)
         {
-            if (employees.Count >= EmployeeLimit)
+            if (_employees.Count >= EmployeeLimit)
             {
-                throw new CapacityLimitException("Employee limit has been reached.");
+                throw new CapacityLimitException("Employee limit exceeded.");
             }
 
             employee.DepartmentId = Id;
-            employees.Add(employee);
+            _employees.Add(employee);
         }
 
         public void UpdateDepartment(string newName, int newEmployeeLimit)
@@ -50,19 +47,16 @@ namespace Company.Departament.Models
 
         public void GetDepartmentEmployees()
         {
-            Console.WriteLine($"Employees in {Name} department:");
-            foreach (var employee in employees)
+            Console.WriteLine($"Employees of {Name} Department:");
+            foreach (var employee in _employees)
             {
-                Console.WriteLine(employee);
+                Console.WriteLine(employee.ToString());
             }
         }
-        public static Department Create(string name, int employeeLimit, int companyId)
+
+        internal List<Employee> GetEmployees()
         {
-            return new Department(name, employeeLimit, companyId);
+            throw new NotImplementedException();
         }
     }
-
-   
-    
-
 }
